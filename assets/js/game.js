@@ -31,10 +31,18 @@ var fightOrSkip = function() {
 
 // fight function
 var fight = function(enemy) {
-    console.log(enemy);
+    // keep track of who goes first
+    var isPlayerTurn = true;
+    if (Math.random() > 0.5) {
+        isPlayerTurn = false;
+    }
+    else {
+    }
+    
 // repeat and execute as long as the enemy-robot is alive
 while(playerInfo.health > 0 && enemy.health > 0) {
-    // repeat and execute as long as the enemy-robot is alive
+    if (isPlayerTurn) {
+    // ask player if they'd like to fight or skp using fightOrSkip function
     if (fightOrSkip()) {
         // if ture, leave fight by breaking loop
         break;
@@ -62,9 +70,11 @@ while(playerInfo.health > 0 && enemy.health > 0) {
         window.alert(enemy.name + " still has " + enemy.health + " health left.");
         }
 
+    // player gets attacked first
+    } else {
     // generate random damage value based on enemy's attack power
     var damage = randomNumber(enemy.attack - 3, enemy.attack);
-
+    // remoe player's health by subtracting the amount we set in the damage variable
     playerInfo.health = Math.max(0, playerInfo.health - damage);
 
     // Log a resulting message to the console so we know that it worked.
@@ -73,11 +83,15 @@ while(playerInfo.health > 0 && enemy.health > 0) {
         // check player's health
       if (playerInfo.health <= 0) {
             window.alert(playerInfo.name + " has died!");
+            // leave while() loop if player is dead
             break;
         } else {
             window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
         }
     }
+    // switch turn order for next round
+    isPlayerTurn = !isPlayerTurn;
+}
 };
 
 
@@ -90,7 +104,6 @@ var startGame = function() {
     for(var i = 0; i < enemyInfo.length; i++) {
      if (playerInfo.health > 0) {
         window.alert("Welcome to Robot Gladiators! Round " + (i + 1));
-        debugger;
         var pickedEnemyObj = enemyInfo[i];
         pickedEnemyObj.health = randomNumber(40, 60);
         // console.log("Player health is " + playerInfo.health + ". " + "Player attack is " + playerInfo.attack + ". " + "Enemy health is " + enemyInfo.health + ". "+ "Enemy attack is " + enemyInfo.attack + ". ");
@@ -145,6 +158,7 @@ else {
 
 // go to shop between battles function
 var shop = function() {
+    window.alert("Your health is currently " + playerInfo.health + ", and attack is currently " + playerInfo.attack + ". How would you like to proceed?");
     // ask player what they'd like to do
     var shopOptionPrompt = window.prompt("Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter: 1 for REFILL, 2 for UPGRADE, or 3 for LEAVE.");
 
@@ -152,9 +166,11 @@ var shop = function() {
     switch (shopOptionPrompt) {
         case 1:
             playerInfo.refillHealth();
+            window.alert("Health increased to " + playerInfo.health + " !");
             break;
         case 2:
             playerInfo.upgradeAttack();
+            window.alert("Attack increased to " + playerInfo.attack + " !");
             break;
         case 3:
             window.alert("Leaving the store.");
